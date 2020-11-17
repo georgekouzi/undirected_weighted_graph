@@ -65,7 +65,6 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
 		for ( node_info i: _wGraph.getV()) {
 			g.addNode(i.getKey());
-			//If this node has at least one neighbor we will enter
 			for ( node_info j:_wGraph.getV(i.getKey())) {			
 				if(g.getNode(j.getKey())!=null)
 					g.connect(i.getKey(), g.getNode(j.getKey()).getKey(),_wGraph.getEdge(i.getKey(), j.getKey()));
@@ -112,15 +111,8 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 	 */
 	@Override
 	public double shortestPathDist(int src, int dest) {
-		//		try {
-		//			// if  node src or node dest dont exist  we return null and throw exception.
 		if(_wGraph.getNode(src)==null||_wGraph.getNode(dest)==null) 
-			return-1;
-		//				throw new Exception("The source node or destination node not exist");
-		//			}
-		//		} catch (Exception e) {e.printStackTrace(); return-1;}	
-
-
+			return-1;	
 		if(src==dest) { 
 			return 0.0;
 		}	
@@ -143,14 +135,8 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 	 */
 	@Override
 	public List<node_info> shortestPath(int src, int dest) {
-		//		try {
-		//			// if  node src or node dest dont exist  we return null and throw exception.
 		if(_wGraph.getNode(src)==null||_wGraph.getNode(dest)==null) 
 			return null;
-		//				throw new Exception("The source node or destination node not exist");
-		//			}
-		//		} catch (Exception e) {e.printStackTrace(); return null;}	
-
 		List<node_info>  c = new ArrayList<node_info>();
 
 		if(src==dest) {
@@ -182,7 +168,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 	}
 
 	/**
-	 * Saves this undirected weighted graph to the given
+	 * Saves this undirected weighted graph to the file name
 	 * if the save successfully The default path to this file is in the project folder.
 	 * @param  String file - The file name.
 	 * @return  - if the file was successfully saved return true else false
@@ -225,6 +211,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 			e.printStackTrace();
 			return false;
 		}		
+
 	}
 
 	/**
@@ -275,7 +262,9 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
 		}
 	}
-
+/**
+ * inner class allows as to compare between two node distance.
+ */
 	private class minDistanse implements Comparator<node_info> {
 		public int compare(node_info dist1, node_info dist2) {
 			return  (int) (dist1.getTag()-dist2.getTag());
@@ -306,9 +295,9 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 			node_info n = p.poll();
 			//running on the neighbors of n node
 			for(node_info neighbor: _wGraph.getV(n.getKey())) {
-				//If we did not visit this node we will enter to the if
+				//If we did not visited in this node we will enter to the if
 				if(neighbor.getInfo()=="false") {
-					//Calculate the updated price(Tag) of n node + the price of the side between n and its neighbor					
+					//Calculate the updated price(Tag) of n node + the price of the side between n and its neighbor	(neighbor)				
 					double total =n.getTag()+_wGraph.getEdge(n.getKey(), neighbor.getKey());
 					if(neighbor.getTag()>total) {
 						//System.out.println(total+"-->"+neighbor.getKey());
@@ -330,83 +319,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 		}
 
 	}
-//	public static void main(String[] args) {
-//		weighted_graph g = new WGraph_DS() ;
-//		weighted_graph g1 = new WGraph_DS() ;
-//
-//		g.addNode(0);
-//		g.addNode(1);
-//		g.addNode(2);
-//		g.addNode(3);
-//		weighted_graph_algorithms g123 = new WGraph_Algo();
-//		g123.init(g);
-//		g.removeNode(0);
-//		System.out.println(g123.save("graph1.txt"));
-//		System.out.println(g123.load("graph1.txt"));		
-//		g.addNode(0);
-//		g1=g123.copy();
-//		System.out.println(g1.nodeSize());
-//		System.out.println(g.nodeSize());
-//		System.out.println(g);
-//		PriorityQueue<Integer> p = new PriorityQueue<>();
-//
-//		p.add(5);
-//		p.add(3);
-//		p.add(6);
-//		//		        p.add(0);
-//		System.out.println(p.poll());  
-//		System.out.println(p.poll());  
-//		System.out.println(p.poll());  
-//		System.out.println("///////////////////////////////////////////////////////////////////////////////////////");
-//
-//		weighted_graph g2 = new WGraph_DS() ;
-//
-//		g2.addNode(1);
-//		g2.addNode(2);
-//		g2.addNode(3);
-//		g2.addNode(4);
-//		g2.addNode(5);
-//		g2.addNode(6);
-//		g2.addNode(7);
-//
-//		g2.connect(1, 3, 9);
-//		g2.connect(1, 2, 7);
-//		g2.connect(1, 6, 14);
-//		g2.connect(2, 3, 10);
-//		g2.connect(2, 4, 15);
-//		g2.connect(3, 6, 2);
-//		g2.connect(3, 4, 11);
-//		g2.connect(4, 5, 6);
-//		g2.connect(6, 5, 9);
-//		//		g2.connect(8, 9, 9);
-//
-//
-//
-//		weighted_graph_algorithms algo = new WGraph_Algo();
-//
-//		algo.init(g2);
-//		System.out.println(algo.shortestPathDist(1,6));
-//
-//		//
-//		//		g123.init(g1);
-//		//		System.out.println(g123.save("graph1.txt"));
-//
-//
-//
-//		//		System.out.println(g);
-//		//		g123.load("C:\\Users\\georg\\eclipse-workspace\\EX_1\\src\\ex1\\tt.txt");	
-//		//	System.out.println(g123.load("graph.txt"));	
-//		System.out.println("//////////////////////////////////////////////////////////");
-//
-//		for(node_info n : algo.shortestPath(1, 6)) {
-//			System.out.print(n.getKey()+",");
-//		}
-//		System.out.println("//////////////////////////////////////////////////////////");
-//
-//		System.out.println(algo.isConnected());
-//
-//	}
-//
+	
 
 
 

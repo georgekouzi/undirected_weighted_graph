@@ -40,9 +40,10 @@ public class WGraph_DS implements weighted_graph,Serializable  {
 	}
 
 	/**
-	 * return the node_data by the node_id,
-	 * @param key - the node_id
-	 * @return the node_data by the node_id, null if none.
+	 * return the node_info by the node id if key node exist.
+	 * run time- O(1).
+	 * @param key - the node id
+	 * @return the node_data by the node_id,return null if the node didn't create .
 	 */
 	public node_info getNode(int key) {
 		if(node_data.containsKey(key))
@@ -52,7 +53,7 @@ public class WGraph_DS implements weighted_graph,Serializable  {
 	}
 
 	/**
-	 * return true iff (if and only if) there is an edge between node1 and node2
+	 * return true if node1 exist and node2 exist and if there is an edge between node1 and node2
 	 * run time- O(1).
 	 * @param node1
 	 * @param node2
@@ -68,12 +69,12 @@ public class WGraph_DS implements weighted_graph,Serializable  {
 			return false;
 	}
 	/**
-	 * return the weight if the edge (node1, node1). In case
-	 * there is no such edge - should return -1
-	 * Note: this method should run in O(1) time.
+	 * check if node1 exist and node2 exist and if there is an edge between node1 and node2 
+	 * In case there is no such edge - should return -1
+	 * run time- O(1).
 	 * @param node1
 	 * @param node2
-	 * @return
+	 * @return- The weight if the edge (node1, node1) exist else return -1.
 	 */
 	@Override
 	public double getEdge(int node1, int node2) {
@@ -86,8 +87,10 @@ public class WGraph_DS implements weighted_graph,Serializable  {
 	}
 	/**
 	 * add a new node to the graph with the given key.
-	 * this method should run in O(1) time.
-	 * if there is already a node with such a key -> no action should be performed.
+	 * key must be positive.
+	 * run time- O(1).
+	 * if there is already a node with such a key no action be performed.
+	 * This is an action that is done on the graph, so mode count need to be updated(+1).
 	 * @param key -node_data. 
 	 */
 	@Override
@@ -105,11 +108,18 @@ public class WGraph_DS implements weighted_graph,Serializable  {
 	}
 	/**
 	 * Connect an edge between node1 and node2, with an edge with weight >=0.
-	 * Note: this method should run in O(1) time.
-	 * Note2: if the edge node1-node2 already exists - the method simply updates the weight of the edge.
+	 * check if node1 exist and node2 exist and if there is an edge between node1 and node2 
+	 *  this method should run in O(1) time.
+	 *  if the edge node1-node2 already exists - the method simply updates the weight of the edge.
+	 *  @param node1
+	 *  @param node2
+	 *  @param w - The weight between node1 and node2.
 	 */
 	@Override
 	public void connect(int node1, int node2, double w) {
+		if(node1==node2) {
+			return;
+		}
 		//weight < 0 throw exception
 		try {
 			if(w<0)
@@ -120,8 +130,13 @@ public class WGraph_DS implements weighted_graph,Serializable  {
 		if(node_data.containsKey(node1)&&node_data.containsKey(node2)) {
 			// if the edge  already exists - the method simply updates the weight of the edge.
 			if(edge_data.containsKey(node_data.get(node1))&&edge_data.get(node_data.get(node1)).containsKey(node_data.get(node2))) {
+				//if this  weight not equal to the new equal we update mc.
+				if(edge_data.get(node_data.get(node1)).get(node_data.get(node2))!=w) {
+					modeCount++;
+				}
 				edge_data.get(node_data.get(node1)).put(node_data.get(node2), w);
 				edge_data.get(node_data.get(node2)).put(node_data.get(node1), w);
+
 				return;
 			}
 			else
@@ -156,8 +171,8 @@ public class WGraph_DS implements weighted_graph,Serializable  {
 	 *
 	 * This method returns a Collection containing all the
 	 * nodes connected to node_id
-	 * Note: this method can run in O(k) time, k - being the degree of node_id.
-	 * @return Collection<node_info>
+	 * run time O(1).
+	 * @return Collection<node_info> else return empty Collection.
 	 */
 	@Override
 	public Collection<node_info> getV(int node_id) {
@@ -172,15 +187,17 @@ public class WGraph_DS implements weighted_graph,Serializable  {
 		}
 	}
 	/**
-	 * Delete the node (with the given ID) from the graph -
-	 * and removes all edges which starts or ends at this node.
-	 * This method should run in O(n), |V|=n, as all the edges should be removed.
+	 * Removes all edges which starts or ends at this node.
+	 * Delete the node (with the given ID) from the graph.
+	 * update the number of rib and mode count. 
+	 * Run time  O(n), |V|=n, as all the edges should be removed.
 	 * @return the data of the removed node (null if none).
 	 * @param key
 	 */
 	@Override
 	public node_info removeNode(int key) {
 		if(node_data.containsKey(key)) {
+			//if node(key) have neighbors.
 			if(edge_data.containsKey(node_data.get(key))) {
 				for(node_info n: getV(key)) {
 					edge_data.get(n).remove(node_data.get(key));		
@@ -199,8 +216,8 @@ public class WGraph_DS implements weighted_graph,Serializable  {
 			return null;
 	}
 	/**
-	 * Delete the edge from the graph,
-	 * Note: this method should run in O(1) time.
+	 * Delete the edge from the graph if exist,
+	 * run time O(1).
 	 * @param node1
 	 * @param node2
 	 */
@@ -219,8 +236,8 @@ public class WGraph_DS implements weighted_graph,Serializable  {
 
 	}
 	/** return the number of vertices (nodes) in the graph.
-	 * Note: this method should run in O(1) time.
-	 * @return
+	 * run time O(1).
+	 * @return - int number of node in the graph.
 	 */
 	@Override
 	public int nodeSize() {
@@ -229,7 +246,7 @@ public class WGraph_DS implements weighted_graph,Serializable  {
 	}
 	/**
 	 * return the number of edges (unidirectional graph).
-	 * Note: this method should run in O(1) time.
+	 * run time O(1).
 	 * @return
 	 */
 	@Override
@@ -237,8 +254,9 @@ public class WGraph_DS implements weighted_graph,Serializable  {
 		return sizeOfEdge;
 	}/**
 	 * return the Mode Count - for testing changes in the graph.
-	 * Any change in the inner state of the graph should cause an increment in the ModeCount
-	 * @return
+	 * Any change(remove node and edge,add node, connect between two nodes and update weight between two nodes that already exist)
+	 * in the inner state of the graph should cause an increment in the ModeCount
+	 * @return - int mode count.
 	 */
 	@Override
 	public int getMC() {
@@ -338,14 +356,17 @@ public class WGraph_DS implements weighted_graph,Serializable  {
 		 * @return true or false. 
 		 */
 
-		public boolean equals(Object obj) {
-			if (this == obj)
+		public boolean equals(Object object) {
+			if (this == object) {
 				return true;
-			if (!(obj instanceof nodeInfo)) 
+			}
+			if (!(object instanceof nodeInfo)) { 
 				return false;
-			nodeInfo other = (nodeInfo) obj;
-			if (_key != other._key)
+			}
+			nodeInfo otherObject = (nodeInfo) object;
+			if (_key != otherObject._key) {
 				return false;
+			}
 			else
 				return true;
 		}
@@ -359,121 +380,24 @@ public class WGraph_DS implements weighted_graph,Serializable  {
 	 * @return true if this edge_data equal to other edge_data and this node_data equal to other node_data
 	 */
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (!(obj instanceof WGraph_DS)) 
+		}
+		if (!(obj instanceof WGraph_DS)) {
 			return false;
-		WGraph_DS other = (WGraph_DS) obj;
-		if (node_data == null&&other.node_data != null) 
+		}
+		WGraph_DS otherObject =  (WGraph_DS) obj;
+		if (!node_data.equals(otherObject.node_data)||!(edge_data.equals(otherObject.edge_data))) {
 			return false;
-		if (edge_data == null&&other.edge_data != null) 
-			return false;
-		if (!node_data.equals(other.node_data))
-			return false;
-		if (!(edge_data.equals(other.edge_data))) 
-			return false;
+		}
 		else
 			return true;
 
 	}
+	//Maybe use in the future
 	public int hashCode() {
 		return Objects.hash(node_data,edge_data);
 	}
 
-	//	public static void main(String[] args) {
-	//		weighted_graph g =new WGraph_DS();
-	//		weighted_graph g1 =new WGraph_DS();
-	//		weighted_graph g2 =new WGraph_DS();
-	//
-	//		g.addNode(1);
-	//		g.addNode(2);
-	//		g.connect(1, 2, 0);
-	//		g1.addNode(1);
-	//		g1.addNode(2);
-	//		g1.connect(1, 2, 0);
-	//		g2.addNode(1);
-	//		g2.addNode(3);
-	//		g2.connect(3, 1, 0);
-	//		System.out.println(g.equals(g1));
-	//
-	//
-	//		g1.removeNode(1);
-	//		System.out.println(g.equals(g1));
-	//		g1.addNode(1);
-	//		g1.connect(1, 2, 0);
-	//
-	//		System.out.println(g.equals(g1));
-	//
-	//		System.out.println(g1.getNode(1).equals(g.getNode(1)));		
-	//
-	//		System.out.println("node size =4 ///edge Size=0 ");
-	//		//		g.addNode(0);
-	//		//		g.addNode(1);
-	//		//		g.addNode(2);
-	//		//		g.addNode(3);
-	//		//		g.connect(1, 2, 0);System.out.println(g.hasEdge(1,2));
-	//		//		g.connect(1, 3, 0);System.out.println(g.hasEdge(1,3));
-	//		//		g.connect(2, 0, 1);System.out.println(g.hasEdge(2,0));
-	//		//		
-	//		//		g1.addNode(0);
-	//		//		g1.addNode(1);
-	//		//		g1.addNode(2);
-	//		//		g1.addNode(3);
-	//		//		g1.connect(1, 2, 0);System.out.println(g.hasEdge(1,2));
-	//		//		g1.connect(1, 3, 0);System.out.println(g.hasEdge(1,3));
-	//		//		g1.connect(2, 0, 1);System.out.println(g.hasEdge(2,0));
-	//		//	System.out.println("node size: "+g.nodeSize());
-	//		//	System.out.println("edge Size: "+g.edgeSize());
-	//		//	System.out.println("connect 1-->2 true ,connect 1-->3 true,connect 2-->0 true, not connect 1-->0, edge Size=3 ");
-	//
-	//		//		((nodeInfo) g.getNode(0)).setPerent(g.getNode(2));
-	//
-	//		//		System.out.println(g.getEdge(2, 0));
-	//		//		g.connect(2, 0, 100);
-	//		//		System.out.println(g.getEdge(2, 0));
-	//
-	//
-	//
-	//		//System.out.println(((nodeInfo) g.getNode(0)).getPerent().getKey());
-	//
-	//
-	//
-	//		//		System.out.println(g.hasEdge(1,0));
-	//		//		System.out.println("edge Size: "+g.edgeSize());
-	//		//		System.out.println("node size: "+g.nodeSize());
-	//		//
-	//		//		System.out.println("remove 1, not connect 1-->2 false , not connect 1-->3 false,connect 2-->0 true, edge Size=1,size of node=3  ");
-	//		//		//		g.removeNode(1);
-	//		//		System.out.println(g.hasEdge(1,2));
-	//		//		System.out.println(g.hasEdge(1,3));
-	//		//		System.out.println(g.hasEdge(2,0));
-	//		//		System.out.println("edge Size: "+g.edgeSize());
-	//		//		System.out.println("node size: "+g.nodeSize());
-	//		//		//		g.removeEdge(2, 0);
-	//		//		System.out.println("edge Size: "+g.edgeSize());
-	//		//		System.out.println("node size: "+g.nodeSize());
-	//		//		//		g.removeEdge(2, 0);
-	//		//		System.out.println("edge Size: "+g.edgeSize());
-	//		//		System.out.println("print graph______________________________________________________________________________________");
-	//		//		System.out.println(g);
-	//
-	//		//		Collection<node_info> c = g.getV(1);
-	//		//		while (c.iterator().hasNext()) {
-	//		//			System.out.println(c.iterator().next().getKey());
-	//		//		}
-	//
-	//		//		HashMap<Integer,HashMap<Integer,Double>> ff=new HashMap<Integer,HashMap<Integer,Double>>(); 
-	//		//		ff.put(1, new HashMap<Integer,Double>());
-	//		//		ff.get(1).put(2, 2.0);
-	//		////		ff.put(1, new HashMap<Integer,Double>());
-	//		//		ff.get(1).put(3, 4.0);
-	//		//		System.out.println(ff.get(1).size());
-	//		//		Collection<Integer> nodes=ff.get(1).keySet();
-	//		//System.out.println(nodes.size());
-	//		//		
-	//		//					for(Integer n:nodes ) {
-	//		//						System.out.println(n);
-	//		//					}
-	//
-	//	}
+
 }
