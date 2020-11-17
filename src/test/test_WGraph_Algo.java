@@ -3,6 +3,7 @@ package test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.Duration;
+import java.util.Collection;
 
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +31,7 @@ class test_WGraph_Algo {
 	void testOneNodeGraph() {
 		weighted_graph g = new WGraph_DS();
 		weighted_graph_algorithms algo = new WGraph_Algo();
-		
+
 		algo.init(g);
 		algo.getGraph().addNode(0);
 
@@ -44,7 +45,7 @@ class test_WGraph_Algo {
 	void testGraph() {
 		weighted_graph g = new WGraph_DS();
 		weighted_graph_algorithms algo = new WGraph_Algo();
-		
+
 		algo.init(g);
 		algo.getGraph().addNode(1);
 		algo.getGraph().addNode(2);
@@ -61,9 +62,9 @@ class test_WGraph_Algo {
 		assertTrue(algo.save("testGraph_1"));
 
 	}
-	
-	
-	
+
+
+
 	@Test
 	void testGraph1() {
 		weighted_graph g = new WGraph_DS(),g1;
@@ -161,9 +162,57 @@ class test_WGraph_Algo {
 		assertTimeoutPreemptively(Duration.ofMillis(100), ()-> algo.isConnected());
 
 	}
-	
 
 
+	@Test
+	public void test_Big_Graph() {
+		//create graph with 14,499,870 connected and 1,000,000 nodes
+		weighted_graph g = new WGraph_DS(),g1=new WGraph_DS();
+		int size =  1000*1000;
+		int ten=1;
+		for (int i = 0; i <size; i++) {
+			g.addNode(i);
+		}
+
+		for (int i = 0; i <size; i++) {
+			int dest=i;
+			g.connect(size-2, i, 0.23); 
+
+			if(i<size-1){
+				g.connect(i,++dest,0.78);
+			}
+			if(i%2==0&&i<size-2) {
+				g.connect(i,2+dest,0.94);
+			}	
+
+			if(ten==i&&(i%2==0)) {
+				for (int j =0 ; j <size; j++) {
+					g.connect(ten, j,0.56);
+					g.connect(ten-2, j, 0.4);
+
+				}
+
+				ten=ten*10;
+			}
+
+
+		}
+
+
+		weighted_graph_algorithms algo = new WGraph_Algo();
+		algo.init(g);
+		assertTrue(algo.isConnected());
+		assertEquals(algo.shortestPathDist(0, 999998),0.23);
+		assertEquals(algo.shortestPathDist(0, 8),0.46);
+		int expected2 []= {6,999998,8};
+		int actual2 [] = new int [3];
+		int i=0;
+		for(node_info n :algo.shortestPath(6, 8)) {
+			actual2[i++]=n.getKey();
+		}
+		assertArrayEquals(expected2,actual2);
+
+	}
 
 
 
