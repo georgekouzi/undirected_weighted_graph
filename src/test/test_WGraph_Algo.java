@@ -3,10 +3,7 @@ package test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.Duration;
-import java.util.Collection;
-
 import org.junit.jupiter.api.Test;
-
 import ex1.WGraph_Algo;
 import ex1.WGraph_DS;
 import ex1.node_info;
@@ -167,7 +164,7 @@ class test_WGraph_Algo {
 	@Test
 	public void test_Big_Graph() {
 		//create graph with 14,499,870 connected and 1,000,000 nodes
-		weighted_graph g = new WGraph_DS(),g1=new WGraph_DS();
+		weighted_graph g = new WGraph_DS();
 		int size =  1000*1000;
 		int ten=1;
 		for (int i = 0; i <size; i++) {
