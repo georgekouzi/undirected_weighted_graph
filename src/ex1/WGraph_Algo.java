@@ -192,6 +192,9 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 	 * Load this file (undirected weighted graph) and this graph point to file graph.
 	 * file name on the computer 
 	 * The default path to this file is in the project folder.
+	 * graph and nodeInfo class need to implements from Serializable interface and after a serialized object has been written into a file
+	 * it can be read from the file and deserialized that is the type information and bytes that represent the object 
+	 * and its data can be used to recreate the object in memory.
 	 * @param  String file - The file name.
 	 * @return  - if the file was successfully load return true else false
 	 */
