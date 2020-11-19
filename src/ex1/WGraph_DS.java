@@ -23,8 +23,9 @@ public class WGraph_DS implements weighted_graph,Serializable  {
 
 	private static final long serialVersionUID = 1L;
 
+	// HashMap in HashMap hold all the edges and the weights in the graph: first key node_info(src), next key node_info(dest) and the value is double (weight).
 	private HashMap<node_info,HashMap<node_info,Double>> edge_data;
-
+	// This HashMap hold all the nodes in the graph.  
 	private HashMap<Integer,node_info> node_data;
 	//count the number of edge
 	private int sizeOfEdge;
